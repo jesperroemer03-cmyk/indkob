@@ -1,0 +1,33 @@
+:root { color-scheme: light; }
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f7faf8; /* matcher THEME_A bg */
+  overscroll-behavior-y: none;
+}
+
+body {
+  font-family: 'Schibsted Grotesk', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+input { font-size: 16px; } /* undgå iOS zoom på fokus; overstyres lokalt for hero-feltet */
+
+button { font: inherit; }
+
+/* ── animationer (fra prototypen) ── */
+@keyframes ilEnter { from { opacity: 0; transform: translateY(-8px) scale(0.98); } to { opacity: 1; transform: none; } }
+.il-enter { animation: ilEnter 280ms cubic-bezier(.2,.8,.2,1); }
+
+@keyframes ilConfirm { 0% { opacity: 0; transform: translateY(4px); } 14% { opacity: 1; transform: none; } 82% { opacity: 1; } 100% { opacity: 0; } }
+.il-confirm { animation: ilConfirm 2000ms ease forwards; }
+
+@keyframes ilSheet { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+.il-sheet { animation: ilSheet 240ms cubic-bezier(.2,.8,.2,1); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
