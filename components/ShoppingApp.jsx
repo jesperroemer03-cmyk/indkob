@@ -5,6 +5,7 @@ import { THEME as t } from '@/lib/theme';
 import { parseEntry, categorise, CAT_BY_ID } from '@/lib/categories';
 import {
   getSupabase, ensureSession, loadHousehold, loadName, clearHousehold,
+  leaveHousehold, deleteHousehold,
 } from '@/lib/supabase';
 import CaptureScreen from './CaptureScreen';
 import ListScreen from './ListScreen';
@@ -142,6 +143,17 @@ export default function ShoppingApp() {
     load();
   };
 
+  const leaveList = async () => {
+    await leaveHousehold(hRef.current);
+    clearHousehold();
+    router.replace('/');
+  };
+  const deleteList = async () => {
+    await deleteHousehold(hRef.current);
+    clearHousehold();
+    router.replace('/');
+  };
+
   if (!ready) {
     return (
       <div style={{ minHeight: '100dvh', background: t.bg, display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -165,7 +177,7 @@ export default function ShoppingApp() {
       <BottomNav screen={screen} setScreen={setScreen} count={activeCount} variant="float" />
 
       {showClear && <ClearSheet count={items.length} onConfirm={clearAll} onClose={() => setShowClear(false)} />}
-      {showShare && household && <ShareSheet code={household.code} onClose={() => setShowShare(false)} />}
+      {showShare && household && <ShareSheet code={household.code} onClose={() => setShowShare(false)} onLeave={leaveList} onDelete={deleteList} />}
     </div>
   );
 }
