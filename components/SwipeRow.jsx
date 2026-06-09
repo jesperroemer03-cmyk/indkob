@@ -4,7 +4,7 @@ import { THEME as t } from '@/lib/theme';
 import { CAT_BY_ID, categorise } from '@/lib/categories';
 import { CheckDisc } from './primitives';
 
-// Vare-række: aktiv (swipe-til-købt + tap-for-rediger), inline-redigering, eller købt.
+// Vare-række: aktiv (swipe-til-købt + knap-for-rediger), inline-redigering, eller købt.
 export default function SwipeRow({ item, onBuy, onUnbuy, onEdit, onDelete }) {
   const [dx, setDx] = React.useState(0);
   const drag = React.useRef({ active: false, x0: 0, moved: false });
@@ -134,7 +134,7 @@ export default function SwipeRow({ item, onBuy, onUnbuy, onEdit, onDelete }) {
   const end = () => {
     if (!drag.current.active) return;
     drag.current.active = false;
-    if (!drag.current.moved) { setDx(0); openEdit(); return; }   // rent tap → rediger
+    if (!drag.current.moved) { setDx(0); return; }   // rent tap gør intet → sikker scroll
     if (dx > TH) { setDx(0); onBuy(item.id); }
     else setDx(0);
   };
@@ -190,9 +190,19 @@ export default function SwipeRow({ item, onBuy, onUnbuy, onEdit, onDelete }) {
             background: t.chipBg, borderRadius: 9, padding: '3px 10px', whiteSpace: 'nowrap', flexShrink: 0,
           }}>× {item.qty}</div>
         )}
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{ opacity: 0.35, flexShrink: 0 }}>
-          <path d="M4 10h11M11 6l4 4-4 4" stroke={t.muted} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <button
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={openEdit}
+          aria-label="Rediger vare"
+          style={{
+            width: 34, height: 34, borderRadius: 11, flexShrink: 0, border: 'none', cursor: 'pointer',
+            background: t.chipBg, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M10.5 2.5l3 3M2.6 13.4l.7-2.6 7-7a1.2 1.2 0 011.7 0l1.2 1.2a1.2 1.2 0 010 1.7l-7 7-2.6.7z"
+              stroke={t.muted} strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </button>
       </div>
     </div>
   );
